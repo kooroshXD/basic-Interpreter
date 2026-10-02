@@ -1,0 +1,151 @@
+# BASIC Interpreter in C
+
+A small **BASIC-like programming language interpreter written entirely in C**.
+
+This project implements a simple interpreter capable of loading and executing BASIC-style programs from a file. It includes variables, arithmetic expressions, control flow, loops, subroutines, labels, input/output, and a recursive-descent expression parser.
+
+The project was built to explore how interpreters work internally, including **lexical analysis, expression parsing, execution flow, stack management, and error handling**.
+
+## Features
+
+* BASIC-style programming syntax
+* Integer variables (`A`–`Z`)
+* Arithmetic expressions
+* Operator precedence
+* Parentheses
+* Unary `+` and `-`
+* Exponentiation
+* `PRINT` statements
+* `INPUT` statements
+* `IF ... THEN`
+* `FOR ... TO ... NEXT` loops
+* `GOTO`
+* `GOSUB` / `RETURN`
+* Line labels
+* Nested `FOR` loops
+* Nested `GOSUB` calls
+* Error handling with `setjmp` / `longjmp`
+* Cross-platform source structure
+* Program loading from external files
+
+## Supported Commands
+
+The interpreter currently supports the following commands:
+
+| Command  | Description                                         |
+| -------- | --------------------------------------------------- |
+| `PRINT`  | Prints strings or expression results                |
+| `INPUT`  | Reads an integer from the user                      |
+| `IF`     | Evaluates a condition                               |
+| `THEN`   | Executes a statement when an `IF` condition is true |
+| `FOR`    | Starts a loop                                       |
+| `NEXT`   | Advances a `FOR` loop                               |
+| `TO`     | Specifies the target value of a `FOR` loop          |
+| `GOTO`   | Jumps to a labeled line                             |
+| `GOSUB`  | Calls a subroutine                                  |
+| `RETURN` | Returns from a subroutine                           |
+| `END`    | Terminates the program                              |
+
+## Example Program
+
+Create a file named `example.bas`:
+
+```basic
+10 PRINT "BASIC INTERPRETER"
+20 INPUT "Enter a number: ", A
+30 FOR B = 1 TO A
+40 PRINT B
+50 NEXT
+60 PRINT "DONE"
+70 END
+```
+
+Then run it with:
+
+```bash
+run example.bas
+```
+
+Example output:
+
+```text
+BASIC INTERPRETER
+Enter a number: ? 5
+1
+2
+3
+4
+5
+DONE
+```
+
+## Another Example
+
+The interpreter supports conditional execution and jumps:
+
+```basic
+10 INPUT "Enter a number: ", A
+20 IF A > 10 THEN GOTO 50
+30 PRINT "Number is 10 or less"
+40 GOTO 60
+50 PRINT "Number is greater than 10"
+60 END
+```
+
+## How It Works
+
+The interpreter follows several main stages when executing a program.
+
+### 1. Program Loading
+
+The source file is loaded into a memory buffer using `fread()`.
+
+```c
+p_buf = (char *)malloc(PROG_SIZE);
+```
+
+The program is then stored in memory and interpreted directly from the buffer.
+
+### 2. Tokenization
+
+`get_token()` reads the source code character by character and converts it into tokens.
+
+The lexer recognizes:
+
+* Numbers
+* Variables
+* Commands
+* Strings
+* Operators
+* Parentheses
+* Line endings
+
+For example:
+
+```text
+A = 10 + 5 * 2
+```
+
+is processed as a sequence of tokens representing:
+
+```text
+VARIABLE
+=
+NUMBER
++
+NUMBER
+*
+NUMBER
+```
+
+### 3. Expression Parsing
+
+Arithmetic expressions are parsed using a **recursive-descent parser**.
+
+The parser is divided into several levels:
+
+```text
+get_exp()
+   |
+leve
+```
