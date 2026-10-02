@@ -17,7 +17,7 @@ static int getche(void)
 }
 #endif
 
-#define NUM_LAB 100
+#define NUM_LAB 1000
 #define LAB_LEN 25
 #define FOR_NEST 25
 #define SUB_NEST 25
@@ -29,7 +29,7 @@ static int getche(void)
 #define COMMAND 4
 #define STRING 5
 #define QUOTE 6
-
+//scan
 #define PRINT 1
 #define INPUT 2
 #define IF 3
@@ -248,16 +248,33 @@ void scan_labels(void)
     int addr;
 
     label_init();
+
     temp = prog;
 
     while (*prog != '\0') {
+
+        /* Skip empty lines */
+        while (*prog == '\r' || *prog == '\n') {
+            if (*prog == '\r' && prog[1] == '\n')
+                prog += 2;
+            else
+                prog++;
+        }
+
+        if (*prog == '\0')
+            break;
+
         line_start = prog;
+
         get_token();
 
         if (token_type == NUMBER) {
+
             addr = get_next_label(token);
+
             if (addr == -1)
                 serror(5);
+
             if (addr == -2)
                 serror(6);
 
@@ -270,7 +287,6 @@ void scan_labels(void)
 
     prog = temp;
 }
-
 void find_eol(void)
 {
     while (*prog != '\n' && *prog != '\r' && *prog != '\0')
